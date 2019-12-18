@@ -1,15 +1,22 @@
 import React, {useState} from 'react';
-// import logo from './logo.svg';
-// import './App.css';
+import Menu from './pages/lounge';
+import './App.css';
 
 function App() {
-  const [conter, setCounter] = useState(0);
-    return (
-      <>
-        <p> {conter}</p>
-        <button onClick={() => setCounter(conter + 1)}> Contador</button>
-      </>
-  );
-}
+  document.title = `Burger Queen`
+    
+  
+  return (
+    <div className='App'>
+      <Menu />
 
-export default App;
+
+    </div>
+    );
+}
+    
+
+
+export default App
+    
+  // não precisa usar $, e não pode usar if, precisa usar ternário
