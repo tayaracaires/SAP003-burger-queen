@@ -1,35 +1,31 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import firebaseApp from '../firebaseconfig';
-import Button from '../components/button';
-import Input from '../components/input'
+import Card from '../components/card';
+import Order from '../components/order';
 
-function Menu() {
-  const [counter, setCounter] = useState([]);
-
+function Menu () {
+  const [Options, setOptions] = useState([]);
+  
   useEffect (() => {
-    firebaseApp.firestore().collection('Menu').get().then(querySnapshot => {
-      const menu = [];
-      querySnapshot.forEach(doc => {
-        menu.push(doc.data())
+    firebaseApp.firestore().collection('Menu').get().then(snapshot => {
+      snapshot.forEach(doc => {
+        setOptions((Options) => [...Options, doc.data()]);
       });
-      setCounter(menu)
-    })
-    
-  }
-  )  
+    })     
+  }, [])  
   
-
   return (
+  <div>
+    {Options.map(menuItem => 
+      <Card name={menuItem.name} price={menuItem.price} handleClick={() => console.log(menuItem)}/>        
+    )}
     <div>
-      {counter.map((item) => 
-        <div>
-          <p>{item.name} R$ {item.price}</p>
-        </div> 
-      )
-      }
+      <Order unit={0} name={''} price={0}/>
+ 
     </div>
-  )
-  }
+  </div>
   
-  export default Menu
-  // não precisa usar $, e não pode usar if, precisa usar ternário
+  );
+}
+
+export default Menu

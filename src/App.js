@@ -1,6 +1,5 @@
-import React, {useState} from 'react';
+import React from 'react';
 import Menu from './pages/lounge';
-import './App.css';
 
 function App() {
   document.title = `Burger Queen`
@@ -13,10 +12,6 @@ function App() {
 
     </div>
     );
-}
-    
-
+} 
 
 export default App
-    
-  // não precisa usar $, e não pode usar if, precisa usar ternário

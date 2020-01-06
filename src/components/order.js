@@ -4,12 +4,12 @@ import Button from './button';
 function Order(props) {
     return (
         <li key={props.id}>
-            <div class="ordem-itens">
+            <div class="ordem-itens">                
                 {props.unit}
                 {props.name}
                 {props.price}
             </div>
-            <Button title={'x'}/>
+            <Button title={props.title}/>
         </li>
     )
 }
