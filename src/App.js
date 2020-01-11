@@ -1,5 +1,5 @@
 import React from 'react';
-import Menu from './pages/lounge';
+import Restaurant from './pages/lounge';
 
 function App() {
   document.title = `Burger Queen`
@@ -7,9 +7,7 @@ function App() {
   
   return (
     <div className='App'>
-      <Menu />
-
-
+      <Restaurant />
     </div>
     );
 } 
