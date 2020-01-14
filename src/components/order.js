@@ -1,16 +1,16 @@
 import React from 'react';
 import { StyleSheet, css} from 'aphrodite';
-import Button from './button'
+import DeleteButton from './deleteBtn';
 
 function Order(props) {
     return (
         <div className={css(styles.order)}> 
             <ol className={css(styles.orderlist)}>
-                <ul className={css(styles.listName)}>Quantidade: {props.unit}</ul>
-                <ul className={css(styles.listName)}>Nome: {props.name}</ul>
-                <ul className={css(styles.listName)}>Preço: R$ {props.price},00</ul>
+                <ul className={css(styles.listName)}>x{props.unit}</ul>
+                <ul className={css(styles.listName)}>Item: {props.name}</ul>
+                <ul className={css(styles.listName)}>R$ {props.price},00</ul>
             </ol>
-            <div><Button handleClick={props.delete}/></div>
+            <div><DeleteButton handleClick={props.delete}/></div>
         </div>
     )
 }

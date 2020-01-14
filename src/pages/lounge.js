@@ -2,13 +2,15 @@ import React, { useEffect, useState } from 'react';
 import firebaseApp from '../firebaseconfig';
 import { StyleSheet, css } from 'aphrodite';
 import Card from '../components/card';
+import MenuButton from '../components/Menu/menuButton';
 import Button from '../components/button';
 import Order from '../components/order';
+import Input from '../components/input';
+// import Header from '../components/Header/header';
 
 function Restaurant () {
     const [ menu, setMenu ] = useState([]);
-    const [ menu1, setMenu1 ] = useState([]);
-    const [ menu2, setMenu2 ] = useState([]);
+    const [ menuType, setMenuType ] = useState([]);
     const [ order, setOrder ] = useState([]);
     const [ modal, setModal ] = useState({status: false});
     const [ options, setOptions] = useState('');
@@ -16,33 +18,20 @@ function Restaurant () {
     const [ client, setClient ] = useState('');
     const [ table, setTable ] = useState('');
     const [ total, setTotal] = useState([]);
-    const [resumo, setResumo] = useState([]);
-    
+     
     useEffect(()=> {
-        firebaseApp.firestore().collection('Menu').where('breakfast', '==', true )        
-        .get().then(querySnapshot => {
+        firebaseApp.firestore().collection('Menu').get().then(querySnapshot => {
             querySnapshot.forEach(doc => {
-                setMenu1((currentState) => [...currentState, doc.data()]);
+                setMenu((currentState) => [...currentState, doc.data()]);
             })
         })    
-        firebaseApp.firestore().collection('Menu').where('day', '==', true )        
-        .get().then(querySnapshot => {
-            querySnapshot.forEach(doc => {
-                setMenu2((currentState) => [...currentState, doc.data()]);
-            })    
-        })
-    }, [])
+    }, [])  
 
-    
-
-    const addOrder = (menuItem) => {
-        const findItem = order.find(item => item.name === menuItem.name)
-        if(findItem) {
-            findItem.unit ++
-            setOrder([...order]);
-        } else {
-            setOrder([...order, menuItem]) 
-        }
+    const filterMenu = (event) => {
+        const dish = event.target.id;
+        const validate = (dish === 'breakfast') ? true : false;
+        const filteredMenu = menu.filter((elem) => elem.breakfast === validate);
+        return setMenuType(filteredMenu);
     }
 
     const verifyOptions = (menuItem) => {
@@ -54,36 +43,56 @@ function Restaurant () {
     }
     
     const addOptionsExtras = () => {
-        const updatedItem = {...modal.item, name: `${modal.item.name} ${options} ${extras}`};
+        const updatedItem = {...modal.item, name: `${modal.item.name} Opção: ${options} ${extras}`};
         addOrder(updatedItem);
         setModal({status: false});
     }
 
+    const addOrder = (menuItem) => {
+        const findItem = order.find(item => item.name === menuItem.name)
+        if(findItem) {
+            findItem.unit ++
+            setOrder([...order]);
+        } else {
+            setOrder([...order, menuItem]) 
+        }
+    }
+
+    const deleteItem = (product) => {
+        if (order.includes(product)) {
+            product.unit --
+        }
+        const remove = order.filter(el => el.unit > 0);
+        setOrder([...remove]);
+    }
+
+    const bill = () => order.reduce((acc, bill)=> {
+        if (extras.length !==0){
+            return acc + ((bill.price + bill.priceEx) * bill.unit);
+        } else {
+            return acc + (bill.price * bill.unit)
+        }
+    }, 0)
+
+
     const sendOrder = (e) => {
         e.preventDefault()
-
-        if (resume.length && table && client) {
+        if (order.length && table && client) {
             firebaseApp.firestore().collection('order').add({                
                 order: order,
                 total: total,
                 name: client,
                 table: parseInt(table),
-                timeSend: new Date(),
-                timeDateS: new Date().getDate(),
-                timeHourS: new Date().getHours(),  
-                timeMinS: new Date().getMinutes(),
-                timeSecS: new Date().getSeconds(),
-                status: 'inProgress',
             }) 
             .then(() => {
-                setResume([])
-                setBill(0)
+                setOrder([])
+                setTotal(0)
                 setClient('')
                 setTable(0)
                 alert('Pedido enviado com sucesso')
             })    
         }
-        else if (!resumo.length) {
+        else if (!order.length) {
             alert('Um item deve ser selecionado')
         }
         else if (!table) {
@@ -94,81 +103,107 @@ function Restaurant () {
         }
     }
 
-    const bill = () => order.reduce((acc, menuItem)=> {
-        return acc + (menuItem.price* menuItem.unit)
-    }, 0)
-    
-
     return (
         <>
             <main className={css(styles.main)}>
-
-            {menu.map((menuItem, index) => {
-                return (
-                    <div key={index} className={css(styles.menu)}>
-                        <Card key={index} {...menuItem} handleClick={()=> {verifyOptions(menuItem)}}/>
-                    </div>
-                )
-            } )}
-
-            { modal.status ? (
-                <div className={css(styles.options)}>
-                    <h3>Extras</h3>
-                    {modal.item.extra.map((elem, index) => (
-                        <div key={index}>
-                            <input onChange={() => setExtras(elem)} type="radio" name="extras" value={elem}/>
-                            <label>{elem}</label>
-                        </div>
-                    ))}
-                    <h3>Opções</h3>
-                    {modal.item.option.map((elem, index) => (
-                        <div key={index}>
-                            <input onChange={() => setOptions(elem)} type="radio" name="options" value={elem}/>
-                            <label>{elem}</label>
-                        </div>
-                    ))}
-                    <button onClick={addOptionsExtras}>Adicionar</button>
-                </div>            
-            ): false}
-
-            <section className={css(styles.order)}>
-                <h1>Pedido</h1>
-                {order.map((item) => 
-                  <Order name= {item.name} price={item.price} unit= {item.unit}/>
-                )}
-                <p>Total: R$ {bill()},00 </p>
-                <Button id={'send-order'} handleClick={sendOrder} title="Enviar para a cozinha"/>
-            </section> 
+                <section className={css(styles.input)}>
+                    <Input placeholder={'Nome do Cliente'}
+                        className='input'
+                        type={'text'}
+                        value={client}
+                        onChange={(event) => { setClient(event.target.value) }} />
+                    <Input placeholder={'Mesa'}
+                        className='input'
+                        type={'number'}
+                        value={table}
+                        min={'0'}
+                        onChange={(event) => { setTable(event.target.value) }} />                
+                </section>    
+                <div className={css(styles.menu)}>
+                    <section className={css(styles.Options)}>
+                        <MenuButton
+                            handleClick={(event) => { filterMenu(event) }}
+                            title='Café da Manhã'
+                            id={'breakfast'} />
+                        <MenuButton
+                            handleClick={(event) => { filterMenu(event) }}
+                            title='Cardápio'
+                            id={'day'} />
+                    </section>
+                    <section className={css(styles.secMenu)}>
+                        {menuType.map((selectedItem) =>
+                            <Card
+                                handleClick={() => verifyOptions(selectedItem)}
+                                {...selectedItem} />
+                        )}
+                    </section>
+                </div>
+                <section className={css(styles.optionsExtras)}>
+                    { modal.status ? (
+                        <div className={css(styles.options)}>
+                            <h2 className={css(styles.orderTitle)}>Extras</h2>
+                            {modal.item.extra.map((elem, index) => (
+                                <div key={index}>
+                                    <input onChange={() => setExtras(elem)} type="radio" name="extras" value={elem}/>
+                                    <label>{elem}</label>
+                                </div>
+                            ))}
+                            <h2>Opções</h2>
+                            {modal.item.option.map((elem, index) => (
+                                <div key={index}>
+                                    <input onChange={() => setOptions(elem)} type="radio" name="options" value={elem}/>
+                                    <label>{elem}</label>
+                                </div>
+                            ))}
+                            <button onClick={addOptionsExtras}>Adicionar</button>
+                        </div>            
+                    ): false}
+                </section>
+                <section className={css(styles.order)}>
+                    <h1>Pedido</h1>
+                    {order.map((item) => 
+                    <Order name= {item.name} price={item.price} unit= {item.unit} delete={(event) =>{ 
+                        event.preventDefault();
+                        deleteItem(item)
+                    }}/>
+                    )}
+                    <p className={css(styles.bill)}>Total: R$ {bill()},00 </p>
+                    <Button id={'send-order'} handleClick={sendOrder} title="Enviar para a cozinha"/>
+                </section> 
             </main>     
         </>
     );
 }
 
-
 const styles = StyleSheet.create({
     main: {
-        fontFamily: ['Montserrat', 'sans-serif'],
-        src: "url('https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap')",
+        fontFamily: ['Libre Baskerville', 'serif'],
+        src: "url('https://fonts.googleapis.com/css?family=Karla|Libre+Baskerville|Martel&display=swap')",
         display: 'flex',
         flexFlow: ['columm', 'wrap'],
         padding: '1vw',
         justifyContent: 'center',
     },
 
-    menu:{
+    menu: {
         width: '50vw',
+    },
+
+    input: {
+        marginBottom: '2vw',
     },
 
     order: {
         display: 'flex',
         flexDirection: 'column',
-        borderColor:'#FFB800',
+        borderColor: '#3F3FBF',
         borderStyle: 'solid',
         borderWidth: '1vw',
         borderRadius: '2vw',
         width: '30vw',
         height: 'max-content',
-        padding: '1vw'
+        padding: '1vw',
+        marginTop:'2vw',
     },
 
     options: {
@@ -177,12 +212,41 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
 
-    secMenu:{
+    optionsExtras:{
+        height: 'min-content',
+        width: 'auto',
+        display: 'flex',
+        flexFlow: ['column', 'wrap'],
+        justifyContent: 'center',
+    },
+
+    secMenu: {
         display: 'flex',
         justifyContent: 'center',
         flexFlow: ['column', 'wrap'],
-        
-    }
+    },
+
+    orderTitle: {
+        textAlign: 'center',
+        margin: '1vw 0',
+        color: '#0C0804',
+    },
+
+    bill: {
+        fontSize: '1.0rem',
+        fontWeight: '600',
+        margin: '1vw 1vw 0'
+    },
+
+    secExtras: {
+        borderStyle: 'dashed',
+        padding: '1vw',
+        display: 'flex',
+        flexDirection: 'column',
+        margin: '0',
+        borderColor: '#BBA250',
+        fontSize: '0.8rem',
+    },
 
 })
 
