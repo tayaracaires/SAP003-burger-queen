@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import firebaseApp from '../firebaseconfig';
+import firebaseApp from '../../utils/firebase';
 import { StyleSheet, css } from 'aphrodite';
 import Card from '../components/card';
 import MenuButton from '../components/Menu/menuButton';
@@ -43,9 +43,10 @@ function Restaurant () {
     }
     
     const addOptionsExtras = () => {
-        const updatedItem = {...modal.item, name: `${modal.item.name} Opção: ${options} ${extras}`};
+        const updatedItem = {...modal.item, name: `${modal.item.name} Opção: ${options} ${extras}, price: ${modal.item.price + modal.item.priceEx}`};
         addOrder(updatedItem);
         setModal({status: false});
+        setExtras('');
     }
 
     const addOrder = (menuItem) => {
@@ -79,8 +80,8 @@ function Restaurant () {
         e.preventDefault()
         if (order.length && table && client) {
             firebaseApp.firestore().collection('order').add({                
-                order: order,
-                total: total,
+                order,
+                total,
                 name: client,
                 table: parseInt(table),
             }) 

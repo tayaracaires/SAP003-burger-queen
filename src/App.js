@@ -1,10 +1,7 @@
 import React from 'react';
 import Restaurant from './pages/lounge';
 
-function App() {
-  document.title = `Burger Queen`
-    
-  
+function App() {  
   return (
     <div className='App'>
       <Restaurant />
