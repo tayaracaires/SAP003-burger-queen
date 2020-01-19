@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import firebaseApp from '../../utils/firebase';
+import firebaseApp from '../utils/firebaseconfig';
 import { StyleSheet, css } from 'aphrodite';
 import Card from '../components/card';
 import MenuButton from '../components/Menu/menuButton';
