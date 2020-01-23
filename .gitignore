@@ -25,3 +25,4 @@ utils
 
 #firebase
 .firebase
+.firebaseconfig.js

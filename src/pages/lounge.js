@@ -29,7 +29,7 @@ function Restaurant () {
 
     const filterMenu = (event) => {
         const dish = event.target.id;
-        const validate = (dish === 'breakfast') ? true : false;
+        const validate = (dish === 'breakfast')
         const filteredMenu = menu.filter((elem) => elem.breakfast === validate);
         return setMenuType(filteredMenu);
     }
@@ -43,37 +43,34 @@ function Restaurant () {
     }
     
     const addOptionsExtras = () => {
-        const updatedItem = {...modal.item, name: `${modal.item.name} Opção: ${options} ${extras}, price: ${modal.item.price + modal.item.priceEx}`};
+        const updatedItem = {...modal.item, name: `${modal.item.name} Opção: ${options} ${extras}`, 
+        price: `${extras.length !== 0 ? modal.item.price + modal.item.priceEx: modal.item.price }`};
         addOrder(updatedItem);
         setModal({status: false});
-        setExtras('');
+        setExtras([]);
     }
 
     const addOrder = (menuItem) => {
+        console.log(menuItem)
         const findItem = order.find(item => item.name === menuItem.name)
         if(findItem) {
             findItem.unit ++
             setOrder([...order]);
         } else {
-            setOrder([...order, menuItem]) 
+           
+         setOrder([...order, menuItem]) 
         }
+        setExtras("")
     }
 
     const deleteItem = (product) => {
-        if (order.includes(product)) {
-            product.unit --
-        }
+        product.unit --
+        
         const remove = order.filter(el => el.unit > 0);
         setOrder([...remove]);
     }
 
-    const bill = () => order.reduce((acc, bill)=> {
-        if (extras.length !==0){
-            return acc + ((bill.price + bill.priceEx) * bill.unit);
-        } else {
-            return acc + (bill.price * bill.unit)
-        }
-    }, 0)
+    const bill = () => order.reduce((acc, bill)=> acc + (bill.price * bill.unit), 0)
 
 
     const sendOrder = (e) => {
@@ -128,7 +125,7 @@ function Restaurant () {
                             id={'breakfast'} />
                         <MenuButton
                             handleClick={(event) => { filterMenu(event) }}
-                            title='Cardápio'
+                            title='Almoço e jantar'
                             id={'day'} />
                     </section>
                     <section className={css(styles.secMenu)}>
@@ -197,19 +194,22 @@ const styles = StyleSheet.create({
     order: {
         display: 'flex',
         flexDirection: 'column',
+        justifyContent: 'center',
+        alignContent: 'center',
+        overflow: 'auto',
         borderColor: '#3F3FBF',
         borderStyle: 'solid',
         borderWidth: '1vw',
         borderRadius: '2vw',
         width: '30vw',
-        height: 'max-content',
-        padding: '1vw',
-        marginTop:'2vw',
+        height: '30vw',
+        padding: '2vw',
+        marginTop:'5vw',
     },
 
     options: {
         display: 'flex',
-        flexFlow: ['row', 'wrap'],
+        flexFlow: ['colum', 'wrap'],
         justifyContent: 'center',
     },
 
@@ -219,6 +219,7 @@ const styles = StyleSheet.create({
         display: 'flex',
         flexFlow: ['column', 'wrap'],
         justifyContent: 'center',
+        padding: '2vw',
     },
 
     secMenu: {
@@ -244,7 +245,7 @@ const styles = StyleSheet.create({
         padding: '1vw',
         display: 'flex',
         flexDirection: 'column',
-        margin: '0',
+        margin: '2vw',
         borderColor: '#BBA250',
         fontSize: '0.8rem',
     },
