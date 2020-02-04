@@ -1,68 +1,136 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+#Burger Queen
 
-## Available Scripts
+## Índice
 
-In the project directory, you can run:
+* [1. Preâmbulo](#1-preâmbulo)
+* [2. Critérios mínimos de aceitação do projeto](#2-critérios-mínimos-de-aceitação-do-projeto)
+* [3. Considerações Gerais](#3-Considerações-Gerais)
 
-### `npm start`
+***
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## 1. Preâmbulo
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+[React](https://reactjs.org/), [Angular](https://angular.io/) e
+[Vue](https://vuejs.org/) são alguns dos _frameworks_ e _bibliotecas_ de
+JavaScript mais usados na área de desenvolvimento ao redor do mundo e existe uma
+razão para isso. No contexto do navegador, [_manter a interface sincronizada com
+o estado é difícil_](https://medium.com/dailyjs/the-deepest-reason-why-modern-javascript-frameworks-exist-933b86ebc445).
 
-### `npm test`
+Ao eleger um _framework_ ou _biblioteca_ para nossa interface, nos apoiamos em
+uma série de convenções e implementações _testadas_ e _documentadas_ para
+resolver um problema comum a toda interface web. Isto nos permite concentrar
+melhor (dedicar mais tempo) nas características _específicas_ de nossa
+aplicação.
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Quando escolhemos uma destas tecnologias não só importamos um pedaço de código
+para reusar (o qual já é um grande valor por si só), mas também adotamos uma
+**arquitetura**, uma série de **princípios de design**, um paradigma, algumas
+**abstrações**, um **vocabulário**, uma **comunidade**, etc...
 
-### `npm run build`
+Como desenvolvedora Front-end, estes kits de desenvolvimento podem resultar em
+uma grande ajuda para implementar rapidamente _features_ dos projetos em que
+você for trabalhar.
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## 2. Critérios mínimos de aceitação do projeto
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+### Definição do produto
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+O [_Product Owner_](https://www.youtube.com/watch?v=7lhnYbmovb4) nos apresentou
+este _backlog_ que é o resultado do seu trabalho com o cliente até hoje.
 
-### `npm run eject`
+***
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+#### [História de usuário 1] Cliente deve poder anotar o seu pedido
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Eu como cliente quero poder anotar o meu pedido saber o valor de cada 
+produto e poder enviar o pedido para a cozinha para ser preparado.
 
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+##### Critérios de aceitação
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+O que deve acontecer para satisfazer as necessidades do usuário?
 
-## Learn More
+* Anotar o nome e mesa.
+* Adicionar produtos aos pedidos.
+* Excluir produtos.
+* Ver resumo e o total da compra.
+* Enviar o pedido para a cozinha (guardar em algum banco de dados).
+* Funcionar bem e se adequar a um _tablet_.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+##### Definição de pronto
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+O acordado abaixo deve acontecer para dizer que a história está terminada:
 
-### Code Splitting
+* Você fez _testes_ de usabilidade e incorporou o _feedback_ do usuário.
+* Você deu deploy de seu aplicativo.
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
+***
 
-### Analyzing the Bundle Size
+#### [História de usuário 2] Chefe de cozinha deve ver os pedidos
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
+Eu como chefe de cozinha quero ver os pedidos dos clientes em ordem, poder marcar que estão prontos e poder notificar os garçons/garçonetes que o pedido está pronto para ser entregue ao cliente.
 
-### Making a Progressive Web App
+##### Critérios de aceitação
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
+* Ver os pedidos à medida em que são feitos.
+* Marcar os pedidos que foram preparados e estão prontos para serem servidos.
+* Ver o tempo que levou para preparar o pedido desde que chegou, até ser marcado como concluído.
 
-### Advanced Configuration
+##### Definição de pronto
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
+* Você fez _testes_ de usabilidade e incorporou o _feedback_ do usuário.
+* Você deu deploy de seu aplicativo.
 
-### Deployment
+***
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
+#### [História de usuário 3] Garçom/Garçonete deve ver os pedidos prontos para servir
 
-### `npm run build` fails to minify
+Eu como garçom/garçonete quero ver os pedidos que estão prontos para entregá-los rapidamente aos clientes.
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+##### Critérios de aceitação
+
+* Ver a lista de pedidos prontos para servir.
+* Marque os pedidos que foram entregues.
+
+##### Definição de pronto
+
+* Você fez _testes_ de usabilidade e incorporou o _feedback_ do usuário.
+* Você deu deploy de seu aplicativo.
+* Os dados devem ser mantidos intactos, mesmo depois que um pedido terminado. Tudo isso para poder ter estatísticas no futuro.
+
+***
+
+#### [História de usuário 4] Usuário deve ter seu perfil (login/senha) para acessar o sistema.
+
+Eu como funcionário do restaurante quero entrar na plataforma e ver apenas a tela importante para o meu trabalho.
+
+##### Critérios de aceitação
+
+O que deve acontecer para satisfazer as necessidades do usuário?
+
+* Criar login e senha.
+* Criar tipo de usuário (cozinha / salão).
+* Entrar na tela correta para cada usuário.
+
+##### Definição de pronto
+
+O acordado abaixo deve acontecer para dizer que a história está terminada:
+
+* Você fez testes de usabilidade e incorporou o feedback do usuário.
+* Você deu deploy de seu aplicativo.
+
+## 3. Considerações Gerais
+
+* Interface deve ser pensada específicamente para rodar em **tablets**.
+* Aplicativo Web **responsivo**.
+* O aplicativo é um _Single Page App_.
+* Segue as recomendações de PWAs.
+
+Ferramentas e bibliotecas: 
+ * JavaScript (ES6 +)
+ * React.js (Hooks)
+ * [Firebase](https://firebase.google.com/docs?hl=pt-br)
+ * [React Router Dom](https://reacttraining.com/react-router/web/guides/quick-start)
+ * [Eslint](https://www.npmjs.com/package/eslint-plugin-react)
+ * [Trello](https://trello.com)
+ 
+***
