@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 # Burger Queen
+=======
+#Burger Queen
+>>>>>>> b56c8a9eb6abe69a8171e645a865983970d1ed77
 
 ## Índice
 
