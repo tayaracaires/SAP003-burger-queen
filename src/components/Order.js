@@ -2,29 +2,27 @@ import React from 'react';
 import { StyleSheet, css} from 'aphrodite';
 import DeleteButton from './deleteBtn';
 
-function Order(props) {
+const Order = (props) => {
     return (
         <div className={css(styles.order)}> 
             <ol className={css(styles.orderlist)}>
-                <ul className={css(styles.listName)}>x{props.unit}</ul>
-                <ul className={css(styles.listName)}>Item: {props.name}</ul>
-                <ul className={css(styles.listName)}>R$ {props.price},00</ul>
-            </ol>
-            <div><DeleteButton handleClick={props.delete}/></div>
+                <ul className={css(styles.listName)}>x{props.unit} <DeleteButton handleClick={props.delete}/></ul>
+                <ul className={css(styles.listName)}>{props.name} R$ {props.price},00</ul>
+            </ol>            
         </div>
     )
 }
 
 const styles = StyleSheet.create({
     order:{
-        display: 'flex',
+        display: 'block',
         flexDirection: 'row',
         alignItems: 'center',
     },
     orderList: {
-        color: '#0C0804',
+        color: '#622162',
         width: 'auto',
-        height: 'auto',
+        height: '40vw',
         fontSize: '0.8rem',
         padding: '1vw',
         margin: '0',

@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import firebaseApp from '../utils/firebaseconfig';
 import { StyleSheet, css } from 'aphrodite';
-import Card from '../components/card';
-import MenuButton from '../components/Menu/menuButton';
-import Button from '../components/button';
-import Order from '../components/order';
-import Input from '../components/input';
-// import Header from '../components/Header/header';
+import Card from '../components/Card';
+import MenuButton from '../components/menuButton';
+import Button from '../components/Button';
+import Order from '../components/Order';
+import Input from '../components/Input';
+import Header from '../components/Header';
 
 function Restaurant () {
     const [ menu, setMenu ] = useState([]);
@@ -51,7 +51,6 @@ function Restaurant () {
     }
 
     const addOrder = (menuItem) => {
-        console.log(menuItem)
         const findItem = order.find(item => item.name === menuItem.name)
         if(findItem) {
             findItem.unit ++
@@ -102,21 +101,9 @@ function Restaurant () {
     }
 
     return (
-        <>
+        <div>
+            <Header />
             <main className={css(styles.main)}>
-                <section className={css(styles.input)}>
-                    <Input placeholder={'Nome do Cliente'}
-                        className='input'
-                        type={'text'}
-                        value={client}
-                        onChange={(event) => { setClient(event.target.value) }} />
-                    <Input placeholder={'Mesa'}
-                        className='input'
-                        type={'number'}
-                        value={table}
-                        min={'0'}
-                        onChange={(event) => { setTable(event.target.value) }} />                
-                </section>    
                 <div className={css(styles.menu)}>
                     <section className={css(styles.Options)}>
                         <MenuButton
@@ -136,40 +123,68 @@ function Restaurant () {
                         )}
                     </section>
                 </div>
-                <section className={css(styles.optionsExtras)}>
-                    { modal.status ? (
-                        <div className={css(styles.options)}>
-                            <h2 className={css(styles.orderTitle)}>Extras</h2>
-                            {modal.item.extra.map((elem, index) => (
-                                <div key={index}>
-                                    <input onChange={() => setExtras(elem)} type="radio" name="extras" value={elem}/>
-                                    <label>{elem}</label>
+                <div>
+                    <section className={css(styles.optionsExtras)}>
+                        { modal.status ? (
+                            <div className={css(styles.secOptions)}>
+                                <h2>Opções</h2>
+                                {modal.item.option.map((elem, index) => (
+                                    <div key={index}>
+                                        <input onChange={() => setOptions(elem)} type="radio" name="options" value={elem}/>
+                                        <label>{elem}</label>
+                                    </div>
+                                ))}
+                                <h3>Extras</h3>
+                                {modal.item.extra.map((elem, index) => (
+                                    <div key={index}>
+                                        <input onChange={() => setExtras(elem)} type="radio" name="extras" value={elem}/>
+                                        <label>{elem}</label>
+                                    </div>
+                                ))}
+                                <div className={css(styles.extrasBtn)}>
+                                    <Button
+                                        id={'send-order'}
+                                        handleClick={() => addOptionsExtras()}
+                                        title='Adicionar'
+                                    />
+                                    <Button
+                                        id={'send-order'}
+                                        handleClick={() => setModal({ status: false })}
+                                        title='Voltar'
+                                    />
                                 </div>
-                            ))}
-                            <h2>Opções</h2>
-                            {modal.item.option.map((elem, index) => (
-                                <div key={index}>
-                                    <input onChange={() => setOptions(elem)} type="radio" name="options" value={elem}/>
-                                    <label>{elem}</label>
-                                </div>
-                            ))}
-                            <button onClick={addOptionsExtras}>Adicionar</button>
-                        </div>            
-                    ): false}
-                </section>
-                <section className={css(styles.order)}>
-                    <h1>Pedido</h1>
-                    {order.map((item) => 
-                    <Order name= {item.name} price={item.price} unit= {item.unit} delete={(event) =>{ 
-                        event.preventDefault();
-                        deleteItem(item)
-                    }}/>
-                    )}
-                    <p className={css(styles.bill)}>Total: R$ {bill()},00 </p>
-                    <Button id={'send-order'} handleClick={sendOrder} title="Enviar para a cozinha"/>
-                </section> 
-            </main>     
-        </>
+                            </div>            
+                        ): false}
+                    </section>
+                        <section className={css(styles.input)}>
+                            <Input placeholder={'Nome do Cliente'}
+                                className='input'
+                                type={'text'}
+                                value={client}
+                                onChange={(event) => { setClient(event.target.value) }} />
+                            <Input placeholder={'Mesa'}
+                                className='input'
+                                type={'number'}
+                                value={table}
+                                min={'0'}
+                                onChange={(event) => { setTable(event.target.value) }} />                
+                        </section>   
+                    <section className={css(styles.order)}>
+                        <h1 className={css(styles.title)}>Pedido</h1> 
+                            {order.map((item) => 
+                                <Order name= {item.name} price={item.price} unit= {item.unit} delete={(event) =>{ 
+                                    event.preventDefault();
+                                    deleteItem(item)
+                            }}/>
+                        )}
+                        <p className={css(styles.bill)}>Total: R$ {bill()},00 </p>
+                        <div className={css(styles.sendOrderBtn)}>
+                            <Button id={'send-order'} handleClick={sendOrder} title="Enviar para a cozinha"/>
+                        </div>
+                     </section> 
+                </div>
+            </main>             
+        </div>
     );
 }
 
@@ -192,25 +207,28 @@ const styles = StyleSheet.create({
     },
 
     order: {
-        display: 'flex',
+        display: 'block',
         flexDirection: 'column',
         justifyContent: 'center',
         alignContent: 'center',
         overflow: 'auto',
-        borderColor: '#3F3FBF',
+        borderColor: '#622162',
         borderStyle: 'solid',
         borderWidth: '1vw',
         borderRadius: '2vw',
-        width: '30vw',
+        width: '35vw',
         height: '30vw',
         padding: '2vw',
-        marginTop:'5vw',
+        marginTop:'2vw',
     },
 
-    options: {
+    secOoptions: {
+        padding: '1vw',
         display: 'flex',
-        flexFlow: ['colum', 'wrap'],
-        justifyContent: 'center',
+        flexDirection: 'column',
+        margin: '0',
+        borderColor: '#BBA250',
+        fontSize: '0.8rem',
     },
 
     optionsExtras:{
@@ -219,7 +237,6 @@ const styles = StyleSheet.create({
         display: 'flex',
         flexFlow: ['column', 'wrap'],
         justifyContent: 'center',
-        padding: '2vw',
     },
 
     secMenu: {
@@ -228,10 +245,11 @@ const styles = StyleSheet.create({
         flexFlow: ['column', 'wrap'],
     },
 
-    orderTitle: {
+    title: {
         textAlign: 'center',
         margin: '1vw 0',
         color: '#0C0804',
+        fontSize:'1.5rem'
     },
 
     bill: {
@@ -245,10 +263,18 @@ const styles = StyleSheet.create({
         padding: '1vw',
         display: 'flex',
         flexDirection: 'column',
-        margin: '2vw',
+        margin: '0',
         borderColor: '#BBA250',
         fontSize: '0.8rem',
     },
+    sendOrderBtn: {
+        display: 'flex',
+        justifyContent: 'center',
+    },
+    extrasBtn: {
+        display: 'flex',
+        justifyContent: 'center',
+    }
 
 })
 

@@ -10,7 +10,7 @@ function MenuButton(props) {
 }
 const styles = StyleSheet.create({
   mainMenu: {
-    backgroundColor: '#3F3FBF',
+    backgroundColor: '#622162 ',
     color: '#F4F4F4',
     width: '17vw',
     height: 'auto',

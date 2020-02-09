@@ -13,15 +13,16 @@ function Card (props) {
 
 const styles = StyleSheet.create({
     card:{
-        backgroundColor: '#3F9FBF',
-        color: '#0C0804',
+        backgroundColor: '#d3cbbf',
+        borderStyle: 'ridge',
         width: '15vw',
         height: 'auto',
         margin: '2vw 1.5vw 1vw 1.5vw',
         fontSize: '0.9rem',
+        fontWeight: 'bolder',
         borderRadius: '2vw',
-        fontWeight: 'bold',
         border: 'none',
+        textAlign: 'center'
     }
 })
 

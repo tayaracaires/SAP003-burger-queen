@@ -19,11 +19,14 @@ const styles = StyleSheet.create({
 
     input:{
         borderRadius: '2vw',
-        borderColor: '#3F3FBF',
+        borderColor: '#d3cbbf ',
         width: '25vw',
-        height: '2vh',
+        height: '10vh',
         margin: '0vw 3vw 1vw 3vw',
-        padding: '1vw'
+        padding: '1vw',
+        display: 'flex',
+        flexFlow:'column',
+        
     }
 
 })
