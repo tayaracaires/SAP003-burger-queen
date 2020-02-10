@@ -3,9 +3,12 @@ import { StyleSheet, css } from 'aphrodite';
 
 function MenuButton(props) {
   return (
-    <button onClick={props.handleClick} id={props.id} className={css(styles.mainMenu)}>
-      {props.title}
-    </button>
+    <div>
+      <button onClick={props.handleClick} id={props.id} className={css(styles.mainMenu)}>
+        {props.title}
+      </button>
+
+    </div>
   )
 }
 const styles = StyleSheet.create({

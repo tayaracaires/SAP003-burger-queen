@@ -6,7 +6,6 @@ import MenuButton from '../components/menuButton';
 import Button from '../components/Button';
 import Order from '../components/Order';
 import Input from '../components/Input';
-import Header from '../components/Header';
 
 function Restaurant () {
     const [ menu, setMenu ] = useState([]);
@@ -102,7 +101,6 @@ function Restaurant () {
 
     return (
         <div>
-            <Header />
             <main className={css(styles.main)}>
                 <div className={css(styles.menu)}>
                     <section className={css(styles.Options)}>
@@ -222,9 +220,15 @@ const styles = StyleSheet.create({
         marginTop:'2vw',
     },
 
+    Options: {
+        display:'flex',
+        justifyContent: 'space-around',
+    },
+
     secOoptions: {
         padding: '1vw',
         display: 'flex',
+        
         flexDirection: 'column',
         margin: '0',
         borderColor: '#BBA250',
